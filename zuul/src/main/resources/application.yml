@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: service-zuul
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+server:
+  port: 9011
+zuul:
+  routes:
+    usersmember:
+      path: /member/**
+      serviceId: service-member
+    usersorder:
+      path: /order/**
+      serviceId: service-order
+  ignored-services: '*'
+ribbon:
+  eureka:
+    enabled: false
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+service-member:
+  ribbon:
+    listOfServers: 127.0.0.1:9021,127.0.0.1:9022
+service-order:
+  ribbon:
+    listOfServers: 127.0.0.1:9031,127.0.0.1:9032
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
